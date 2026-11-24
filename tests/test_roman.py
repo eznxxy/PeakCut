@@ -58,8 +58,8 @@ c = brain._tidy({"hook": "चूना लगा", "title": "उसको चू
 check("hook, title and highlighted words are in Roman letters", (c["hook"], c["title"], c["highlight_words"]) == ("CHUNA LAGA", "usko chuna", ["chuna", "boss"]), str(c))
 
 # ---- the language rule: English stays, Hindi/Urdu in Roman letters, everything else translated into English
-check("which languages are translated", [brain.needs_translation(x) for x in ("en", "en-US", "hi", "ur", "es", "ar", "")]
-      == [False, False, False, False, True, True, False])
+check("which languages are translated", [brain.needs_translation(x) for x in ("en", "en-US", "id", "id-ID", "hi", "ur", "es", "ar", "")]
+      == [False, False, False, False, False, False, True, True, False])
 def by_purpose(prompt, schema=None, purpose=""):
     if purpose == "Caption translation":
         n = int(prompt.split("Lines (")[1].split(")")[0])
@@ -84,6 +84,41 @@ check("Hindi is never translated, only spelled in Roman letters", text(out) == "
 brain.ask_ai = by_purpose
 answers["now"] = ["Hello", "there", "friend."]
 check("English stays English", text(brain.english_captions(ws("hello there friend"), "en", "")) == "Hello there friend.")
+
+# ---- Indonesian stays Indonesian
+asked = []
+def listen(prompt, schema=None, purpose=""):
+    asked.append((purpose, prompt))
+    return answers["now"], "m", 10
+brain.ask_ai = listen
+yt_asked = []
+def yt_for_indonesian():
+    yt_asked.append(1)
+    return yt_en
+answers["now"] = ["Aku", "tidak", "bisa", "menang."]
+out = brain.english_captions(ws("aku tidak bisa menang"), "id", "", youtube_english=yt_for_indonesian)
+check("Indonesian captions are tidied and stay Indonesian", text(out) == "Aku tidak bisa menang.", text(out))
+check("...nothing is translated, and YouTube's English is not fetched", ([p for p, _ in asked], yt_asked) == (["Caption wording fix"], []), str(asked))
+check("...and the AI is told not to translate", "keep them in Indonesian" in asked[0][1])
+answers["now"] = ["I", "cannot", "really", "win."]
+out = brain.english_captions(ws("aku tidak bisa menang"), "id", "")
+check("an English answer is not used for Indonesian words", text(out) == "aku tidak bisa menang", text(out))
+answers["now"] = ["Hello", "there", "friend."]
+brain.english_captions(ws("hello there friend"), "en", "")
+check("English videos get no Indonesian rule", "Indonesian" not in asked[-1][1])
+brain.ask_ai = no_ai
+check("Indonesian without the AI is kept as heard", text(brain.english_captions(ws("aku tidak bisa"), "id", "")) == "aku tidak bisa")
+check("the AI is told to write Indonesian videos' text in Indonesian", "in Indonesian, write them in Indonesian" in brain._rules(15, 60, "[1] halo semua"))
+
+# ---- captions saved before this, translated into English, are not used again for an Indonesian video
+from studio import jobs
+def saved(lang):
+    clip = {"start": 0.0, "end": 5.0, "fixed_words": ws("old saved words"), "fixed_for": [0.0, 5.0, "en2"]}
+    job = {"lang": lang, "title": "", "source": {}}
+    first = text(jobs._caption_words(job, clip, ws("aku tidak bisa"), 0.0))
+    return first, text(jobs._caption_words(job, clip, ws("aku tidak bisa"), 0.0)), clip["fixed_for"][2]
+check("re-making an Indonesian clip drops its English captions", saved("id") == ("aku tidak bisa", "aku tidak bisa", "id"), str(saved("id")))
+check("...other languages keep their saved captions", saved("es") == ("old saved words", "old saved words", "en2"), str(saved("es")))
 
 print("ALL PASSED" if not fails else f"{len(fails)} failed")
 import shutil; shutil.rmtree(os.environ["PEAKCUT_DATA"], ignore_errors=True)

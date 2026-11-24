@@ -484,7 +484,9 @@ def render_one(job, clip, words):
 
 
 def _caption_words(job, clip, words, off):
-    span = [round(clip["start"], 2), round(clip["end"], 2), "en2"]      # "en2": captions made always-English
+    # "en2": captions made always-English; "id": Indonesian kept, so older ones translated into English are made again
+    kept = "id" if (job.get("lang") or "").lower().startswith("id") else "en2"
+    span = [round(clip["start"], 2), round(clip["end"], 2), kept]
     if clip.get("fixed_for") == span and clip.get("fixed_words") and not any(
             roman.needs_roman(w.get("w", "")) for w in clip["fixed_words"]):
         raw = clip["fixed_words"]          # already tidied for this exact span: no second AI call

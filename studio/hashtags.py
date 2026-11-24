@@ -27,6 +27,9 @@ these they thing things think this those though through time too took try under 
 well went were what when where whether which while who whole why will with without won would yeah yes you your
 hai kya yaar nahi nahin bhai toh aur mein tha kar karo kiya ho hain bhi koi abhi main mera tera apna isko usko jab tab phir
 woh wo ye yeh hum tum aap kuch sab bohot bahut matlab accha acha theek lekin par kyun kaise
+yang dan ini itu dari untuk dengan dalam pada juga ada adalah tidak bukan belum sudah udah akan bisa aku saya kamu kita
+kami mereka dia apa siapa kenapa gimana bagaimana kalau kalo karena tapi tetapi jadi lagi sama seperti kayak banget
+nggak enggak gak gue lo dong sih deh kok nih tuh aja saja masih harus mau atau terus sampai sekarang semua orang
 actual actually literally basically honestly probably definitely obviously seriously totally bro dude man chat stream video
 fuck fucking fucked shit damn bitch bitches ass dick pussy sex nigga nigger niggas porn rape
 """.split())

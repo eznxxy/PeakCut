@@ -106,6 +106,12 @@ offers to download it. Set a creator's language on their Setup page so their liv
 It understands Modern Standard Arabic and everyday dialects, and the AI turns English words said in between
 back into English. Captions on the clips are in English.
 
+### Videos in Indonesian
+
+Clips from YouTube videos spoken in Indonesian keep their captions, big text, title and description in Indonesian.
+This uses YouTube's own transcript of the video. Uploads, Twitch, Kick and live recordings in Indonesian are not
+supported yet, as there is no Indonesian speech model.
+
 ## Settings
 
 Everything is set through environment variables, normally in a `.env` file next to this README.

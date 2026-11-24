@@ -36,6 +36,9 @@ check("every tag is plain letters and digits", all(t.isalnum() and t == t.lower(
 check("a channel name loses its Live and Official", (h.channel_tag("Kai Cenat Live"), h.channel_tag("Pewdiepie Official")) == ("kaicenat", "pewdiepie"))
 check("at most five even with many to choose from", len(h.make(SAID, TITLE, "Kai Cenat", "GTA 6", "funny", ["a1b", "c2d", "e3f", "g4h", "i5j", "k6l"])) == 5)
 
+said_id = h.make("yang ini penjara dan yang itu penjara, kalau tidak bisa kenapa kalau bisa", "Video", "Windah", None)
+check("common Indonesian words are not tags, the subject is", "penjara" in said_id and not set(said_id) & {"yang", "kalau", "bisa", "tidak"}, str(said_id))
+
 NL = chr(10)
 words = [{"w": w, "s": 10 + i, "e": 10.5 + i} for i, w in enumerate(SAID.split())]
 clip = {"start": 10, "end": 40, "category": "fail", "description": "Kai gets stuck up #gta", "hashtags": ["GTA6"]}
