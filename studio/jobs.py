@@ -108,12 +108,12 @@ _by_user: dict = {}                       # user -> {job id: job}: listing one p
 _lock = threading.RLock()
 on_clip_ready: list = []   # callbacks (job, clip), run once when a clip first finishes
 
-DEFAULTS = {"max_clips": 6, "min_len": 15, "max_len": 60, "style": "bounce", "layout": "blur", "quality": 720,
+DEFAULTS = {"max_clips": 6, "min_len": 180, "max_len": 300, "style": "bounce", "layout": "blur", "quality": 720,
             "range_start": None, "range_end": None, "captions": True, "hook_text": "", "description_text": "",
             "lang": "en"}   # lang: the language spoken
 
 
-LIMITS = {"max_clips": (1, 20), "min_len": (5, 120), "max_len": (10, 180), "quality": (360, 1080)}
+LIMITS = {"max_clips": (1, 20), "min_len": (5, 180), "max_len": (10, 300), "quality": (360, 1080)}
 
 
 def clean_options(options) -> dict:
@@ -385,8 +385,8 @@ def request_render(jid, cid, changes: dict):
         new["end"] = min(new["end"], clip["src_end"])
     if not (math.isfinite(new["start"]) and math.isfinite(new["end"])) or new["start"] < 0:
         raise ValueError("Those times aren't valid.")
-    if not 3 <= new["end"] - new["start"] <= 180:
-        raise ValueError("A clip can be 3 to 180 seconds long.")
+    if not 3 <= new["end"] - new["start"] <= LIMITS["max_len"][1] + 1:   # the breath added around a clip may take it just past the limit
+        raise ValueError("A clip can be 3 to 300 seconds long.")
     for k in ("hook", "title", "description", "style", "layout"):
         if k in changes:
             new[k] = str(changes[k])[:{"hook": 60, "title": 100, "description": 2000}.get(k, 20)]

@@ -1383,8 +1383,8 @@ function drawAdd(variant) {
       ${langSeg(c?.lang || "en")}
       <div class="ob wide"><div class="ot">Clips</div><div class="nsteps">
         ${stepper("o_max", "How many", c?.max_clips ?? 6, 1, 20, 1, "")}
-        ${stepper("o_min", "Shortest", c?.min_len ?? 15, 5, 120, 5, "s")}
-        ${stepper("o_maxlen", "Longest", c?.max_len ?? 60, 10, 180, 5, "s")}
+        ${stepper("o_min", "Shortest", c?.min_len ?? 180, 5, 180, 5, "s")}
+        ${stepper("o_maxlen", "Longest", c?.max_len ?? 300, 10, 300, 5, "s")}
       </div></div>
       <div class="ob wide"><label class="f"><span class="ot" style="margin:0">Big text on every clip <span style="font-weight:400">(optional)</span></span>
         <input id="o_hook" maxlength="60" autocomplete="off" value="${esc(c?.hook_text || "")}" placeholder="Left empty, the AI writes a different one for each clip" aria-label="Big text on every clip"></label></div>
